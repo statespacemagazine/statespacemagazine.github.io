@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editorial Schedule - Space State</title>
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <style>
         :root { --bg-color: #fdfbf7; --card-bg: #ffffff; --text-color: #1a1a1a; --accent-color: #B129F5; --border-color: #e2d9ce; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -57,6 +57,20 @@
         .no-events { color: #777; font-style: italic; padding: 20px 0; }
         
         footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); margin-top: 40px; font-size: 0.9rem; color: #666; }
+
+        @media (max-width: 768px) {
+            body { padding-top: 120px; }
+            .nav-container { flex-wrap: wrap; justify-content: center; gap: 5px; }
+            .tab-btn { font-size: 0.85rem; padding: 6px 12px; }
+            header h1 { font-size: 2.2rem; }
+            .content-box { padding: 20px; }
+            h2 { font-size: 1.6rem; }
+            .schedule-nav { gap: 10px; }
+            .filter-btn { flex: 1; padding: 10px 8px; font-size: 0.85rem; }
+            .timeline-title { font-size: 1.2rem; }
+            .status-badge { display: block; width: fit-content; margin: 6px 0 0 0; }
+            .timeline-desc { overflow-wrap: anywhere; }
+        }
     </style>
 </head>
 <body>
