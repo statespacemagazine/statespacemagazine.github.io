@@ -3,140 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Editorial Magazine</title>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <title>Space State Magazine</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #fdfbf7;
-            --text-color: #1a1a1a;
-            --accent-color: #8c1d1d;
-            --border-color: #e2d9ce;
-        }
+        :root { --bg-color: #fdfbf7; --card-bg: #ffffff; --text-color: #1a1a1a; --accent-color: #B129F5; --border-color: #e2d9ce; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 20px;
-        }
-        header {
-            text-align: center;
-            padding: 40px 0;
-            border-bottom: 2px solid var(--text-color);
-            margin-bottom: 40px;
-        }
-        header h1 {
-            font-family: 'Lora', serif;
-            font-size: 3rem;
-            letter-spacing: -1px;
-            margin-bottom: 10px;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; padding-top: 70px; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; background-color: var(--bg-color); border-bottom: 1px solid var(--border-color); z-index: 1000; display: flex; justify-content: center; padding: 10px 0; }
+        .nav-container { width: 100%; max-width: 1200px; display: flex; justify-content: space-around; padding: 0 20px; }
+        .tab-btn { text-decoration: none; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; color: #666; padding: 8px 16px; border-bottom: 2px solid transparent; transition: all 0.2s ease; }
+        .tab-btn:hover { color: var(--accent-color); }
+        .tab-btn.active { color: var(--text-color); border-bottom: 2px solid var(--accent-color); }
+        header { text-align: center; padding: 40px 20px; border-bottom: 2px solid var(--text-color); max-width: 1200px; margin: 0 auto 40px auto; }
+        header h1 { font-family: 'Lora', serif; font-size: 3rem; letter-spacing: -1px; margin-bottom: 10px; }
         header p { color: #666; font-size: 1.1rem; }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 40px;
-        }
-        @media (max-width: 768px) {
-            .container { grid-template-columns: 1fr; }
-        }
-        
-        main section {
-            background: #fff;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 40px;
-        }
-        h2 {
-            font-family: 'Lora', serif;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .article-card { margin-bottom: 25px; }
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .content-box { background: var(--card-bg); padding: 40px; border: 1px solid var(--border-color); margin-bottom: 40px; }
+        h2 { font-family: 'Lora', serif; font-size: 2rem; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .article-card { margin-bottom: 35px; border-bottom: 1px dashed var(--border-color); padding-bottom: 25px; }
+        .article-card:last-child { border-bottom: none; }
         .article-card span { font-size: 0.85rem; color: var(--accent-color); font-weight: 600; text-transform: uppercase; }
-        .article-card h3 { font-family: 'Lora', serif; font-size: 1.4rem; margin: 5px 0; }
-        .article-card p { color: #444; font-size: 0.95rem; }
-        
-        .pdf-container {
-            width: 100%;
-            height: 600px;
-            border: 1px solid var(--border-color);
-        }
-        
-        aside .sidebar-widget {
-            background: #fff;
-            padding: 25px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 30px;
-        }
-        .calendar-box {
-            width: 100%;
-            height: 350px;
-            background: #f4efea;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #777;
-            border: 1px dashed var(--border-color);
-        }
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            border-top: 1px solid var(--border-color);
-            margin-top: 40px;
-            font-size: 0.9rem;
-            color: #666;
-        }
+        .article-card h3 a { font-family: 'Lora', serif; font-size: 1.6rem; color: var(--text-color); text-decoration: none; margin: 5px 0 10px 0; display: inline-block; }
+        .article-card h3 a:hover { color: var(--accent-color); }
+        .article-card p { color: #333; font-size: 1rem; }
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); margin-top: 40px; font-size: 0.9rem; color: #666; }
+        @media (max-width: 768px) { body { padding-top: 120px; .nav-container { flex-wrap: wrap; justify-content: center; gap: 5px; } .tab-btn { font-size: 0.85rem; padding: 6px 12px; } header h1 { font-size: 2.2rem; } .content-box { padding: 20px; } }
     </style>
 </head>
 <body>
-
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="tab-btn active">Weekly Articles</a>
+            <a href="magazine.html" class="tab-btn">Termly Magazine</a>
+            <a href="schedule.html" class="tab-btn">Schedule</a>
+            <a href="about.html" class="tab-btn">About & Contact</a>
+        </div>
+    </nav>
     <header>
-        <h1>The Chronicle</h1>
-        <p>Weekly essays, seasonal editions, and editorial calendar.</p>
+        <h1>Space State</h1>
+        <p>A brief overview of Yorkshire physics and beyond</p>
     </header>
-
-    <div class="container">
-        <!-- Left Column: Articles & PDF -->
-        <main>
-            <section id="weekly-articles">
-                <h2>Latest Weekly Articles</h2>
-                <div class="article-card">
-                    <span>October 8, 2026</span>
-                    <h3>Reflections on Modern Static Architecture</h3>
-                    <p>Write your weekly article text right here inside this paragraph block. Clean typography ensures readability across all devices.</p>
-                </div>
-            </section>
-
-            <section id="termly-magazine">
-                <h2>Termly Magazine Issue</h2>
-                <!-- Replace the src with your actual PDF file path once uploaded -->
-                <iframe class="pdf-container" src="magazines/sample-issue.pdf" title="Magazine PDF"></iframe>
-            </section>
-        </main>
-
-        <!-- Right Column: Calendar & Info -->
-        <aside>
-            <div class="sidebar-widget">
-                <h2>Schedule</h2>
-                <!-- Replace this placeholder div with your Google Calendar iframe embed code -->
-                <div class="calendar-box">
-                    [ Paste Google Calendar IFrame Here ]
-                </div>
+    <div class="main-container">
+        <section class="content-box">
+            <h2>Latest Weekly Articles</h2>
+            
+            <!-- ARTICLE ARCHIVE ROW START -->
+            <div class="article-card">
+                <span>October 8, 2026</span>
+                <h3><a href="articles/article-1.html">Reflections on Modern Static Architecture</a></h3>
+                <p>This text acts as a brief teaser preview of your article. Clicking the title link smoothly opens up its own standalone structural page layout.</p>
             </div>
-        </aside>
+            <!-- ARTICLE ARCHIVE ROW END -->
+
+        </section>
     </div>
-
-    <footer>
-        <p>&copy; 2026 The Chronicle. All rights reserved.</p>
-    </footer>
-
+    <footer><p>&copy; 2026 Space state magazine. All rights reserved.</p></footer>
 </body>
 </html>
-
