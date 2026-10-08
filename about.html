@@ -1,10 +1,97 @@
-<!-- Use the exact same Head and Nav elements from index.html -->
-<!-- Adjust active state: make "about.html" class="tab-btn active" -->
-<div class="main-container">
-    <section class="content-box">
-        <h2>About & Contact</h2>
-        <h3>About Space State</h3>
-        <p style="margin: 10px 0 20px 0;">Welcome to Space State magazine. This publication exploration breaks down physics concepts, updates, and research happening throughout Yorkshire and beyond.</p>
-        <!-- Paste your Contact Form elements right down here -->
-    </section>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About & Contact - Space State</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #fdfbf7; --card-bg: #ffffff; --text-color: #1a1a1a; --accent-color: #B129F5; --border-color: #e2d9ce; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; padding-top: 70px; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; background-color: var(--bg-color); border-bottom: 1px solid var(--border-color); z-index: 1000; display: flex; justify-content: center; padding: 10px 0; }
+        .nav-container { width: 100%; max-width: 1200px; display: flex; justify-content: space-around; padding: 0 20px; }
+        .tab-btn { text-decoration: none; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; color: #666; padding: 8px 16px; border-bottom: 2px solid transparent; transition: all 0.2s ease; }
+        .tab-btn:hover { color: var(--accent-color); }
+        .tab-btn.active { color: var(--text-color); border-bottom: 2px solid var(--accent-color); }
+        header { text-align: center; padding: 40px 20px; border-bottom: 2px solid var(--text-color); max-width: 1200px; margin: 0 auto 40px auto; }
+        header h1 { font-family: 'Lora', serif; font-size: 3rem; letter-spacing: -1px; margin-bottom: 10px; }
+        header p { color: #666; font-size: 1.1rem; }
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+        .content-box { background: var(--card-bg); padding: 40px; border: 1px solid var(--border-color); margin-bottom: 40px; }
+        h2 { font-family: 'Lora', serif; font-size: 2rem; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        
+        /* About Column Styles */
+        .about-section h3 { font-family: 'Lora', serif; font-size: 1.5rem; margin: 25px 0 10px 0; }
+        .about-section p { color: #333; font-size: 1.05rem; margin-bottom: 20px; }
+        
+        /* Contact Box Sidebar Styles */
+        .contact-sidebar { background: #fff; padding: 30px; border: 1px solid var(--border-color); height: fit-content; text-align: center; }
+        .contact-sidebar h3 { font-family: 'Lora', serif; font-size: 1.4rem; margin-bottom: 15px; }
+        .contact-sidebar p { color: #555; font-size: 0.95rem; margin-bottom: 25px; }
+        
+        .email-btn { display: inline-block; width: 100%; background-color: var(--text-color); color: #fff; text-decoration: none; padding: 12px; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: background-color 0.2s; text-align: center; font-family: 'Inter', sans-serif; }
+        .email-btn:hover { background-color: var(--accent-color); }
+        .email-text-link { display: inline-block; margin-top: 15px; font-size: 0.85rem; color: #666; text-decoration: none; }
+        .email-text-link:hover { color: var(--accent-color); text-decoration: underline; }
+
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); margin-top: 40px; font-size: 0.9rem; color: #666; width: 100%; grid-column: span 2; }
+        
+        @media (max-width: 900px) { body { padding-top: 120px; } .nav-container { flex-wrap: wrap; justify-content: center; gap: 5px; } .tab-btn { font-size: 0.85rem; padding: 6px 12px; } .main-container { grid-template-columns: 1fr; gap: 0; } footer { grid-column: span 1; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="tab-btn">Home</a>
+            <a href="archive.html" class="tab-btn">All Weekly Articles</a>
+            <a href="magazine.html" class="tab-btn">Termly Magazine</a>
+            <a href="schedule.html" class="tab-btn">Schedule</a>
+            <a href="about.html" class="tab-btn active">About & Contact</a>
+        </div>
+    </nav>
+
+    <header>
+        <h1>Space State</h1>
+        <p>The story behind the publication and how to get in touch</p>
+    </header>
+
+    <div class="main-container">
+        
+        <!-- Left Column: About Me Bio Content -->
+        <main class="content-box about-section">
+            <h2>About The Magazine</h2>
+            
+            <h3>Who I Am</h3>
+            <p>info</p>
+            
+            <h3>Why I Started Space State</h3>
+            <p>more info</p>
+            
+            <p>more more info.</p>
+        </main>
+
+        <!-- Right Column: Direct Mailto Contact Box -->
+        <aside class="contact-sidebar">
+            <h3>Get in Touch</h3>
+            <p>Have a question, an article suggestion, or want to submit your research? Send an email directly to our inbox.</p>
+            
+            <!-- Standard mailto link that opens the reader's native email application -->
+            <a href="mailto:statespacemagazine@://gmail.com" class="email-btn">
+                Send an Email &rarr;
+            </a>
+            
+            <a href="mailto:statespacemagazine@gmail.com" class="email-text-link">
+                statespacemagazine@gmail.com
+            </a>
+        </aside>
+
+    </div>
+
+    <footer><p>&copy; 2026 Space state magazine. All rights reserved.</p></footer>
+
+</body>
+</html>

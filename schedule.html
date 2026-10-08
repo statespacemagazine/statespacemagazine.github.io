@@ -1,10 +1,187 @@
-<!-- Use the exact same Head and Nav elements from index.html -->
-<!-- Adjust active state: make "schedule.html" class="tab-btn active" -->
-<div class="main-container">
-    <section class="content-box">
-        <h2>Editorial Schedule</h2>
-        <div style="width:100%; height:550px; background:#f4efea; display:flex; align-items:center; justify-content:center; color:#777; border:1px dashed #e2d9ce;">
-            [ Paste Google Calendar IFrame Here ]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Schedule - Space State</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #fdfbf7; --card-bg: #ffffff; --text-color: #1a1a1a; --accent-color: #B129F5; --border-color: #e2d9ce; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; padding-top: 70px; }
+        nav { position: fixed; top: 0; left: 0; width: 100%; background-color: var(--bg-color); border-bottom: 1px solid var(--border-color); z-index: 1000; display: flex; justify-content: center; padding: 10px 0; }
+        .nav-container { width: 100%; max-width: 1200px; display: flex; justify-content: space-around; padding: 0 20px; }
+        .tab-btn { text-decoration: none; font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 600; color: #666; padding: 8px 16px; border-bottom: 2px solid transparent; transition: all 0.2s ease; }
+        .tab-btn:hover { color: var(--accent-color); }
+        .tab-btn.active { color: var(--text-color); border-bottom: 2px solid var(--accent-color); }
+        header { text-align: center; padding: 40px 20px; border-bottom: 2px solid var(--text-color); max-width: 1200px; margin: 0 auto 40px auto; }
+        header h1 { font-family: 'Lora', serif; font-size: 3rem; letter-spacing: -1px; margin-bottom: 10px; }
+        header p { color: #666; font-size: 1.1rem; }
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .content-box { background: var(--card-bg); padding: 40px; border: 1px solid var(--border-color); margin-bottom: 40px; }
+        h2 { font-family: 'Lora', serif; font-size: 2rem; margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        
+        /* Links style configuration inside timeline cards */
+        .calendar-link {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: var(--accent-color);
+            text-underline-offset: 4px;
+            transition: color 0.2s ease;
+        }
+        .calendar-link:hover { color: var(--accent-color); }
+
+        /* Schedule Filtering Buttons */
+        .schedule-nav { display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        .filter-btn { background: none; border: 1px solid var(--border-color); padding: 8px 16px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; color: #666; transition: all 0.2s; }
+        .filter-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+        .filter-btn.active { background-color: var(--text-color); color: #fff; border-color: var(--text-color); }
+
+        /* Editorial Timeline Styles */
+        .timeline { position: relative; padding-left: 20px; border-left: 2px solid var(--border-color); display: none; }
+        .timeline.active { display: block; }
+        .timeline-item { position: relative; margin-bottom: 40px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -27px; top: 5px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background-color: var(--accent-color); border: 2px solid var(--bg-color);
+        }
+        .timeline-date { font-size: 0.85rem; font-weight: 600; color: var(--accent-color); text-transform: uppercase; letter-spacing: 1px; }
+        .timeline-title { font-family: 'Lora', serif; font-size: 1.4rem; margin: 5px 0; color: var(--text-color); }
+        .timeline-desc { color: #555; font-size: 0.95rem; }
+        .status-badge { display: inline-block; font-size: 0.7rem; font-weight: 600; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; margin-left: 10px; }
+        .status-upcoming { background: #e0f2fe; color: #0369a1; }
+        .status-released { background: #dcfce7; color: #15803d; }
+        .no-events { color: #777; font-style: italic; padding: 20px 0; }
+        
+        footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); margin-top: 40px; font-size: 0.9rem; color: #666; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="tab-btn">Home</a>
+            <a href="archive.html" class="tab-btn">All Weekly Articles</a>
+            <a href="magazine.html" class="tab-btn">Termly Magazine</a>
+            <a href="schedule.html" class="tab-btn active">Schedule</a>
+            <a href="about.html" class="tab-btn">About & Contact</a>
         </div>
-    </section>
-</div>
+    </nav>
+
+    <header>
+        <h1>Space State Calendar</h1>
+        <p>Must know events and deadlines</p>
+    </header>
+
+    <div class="main-container">
+        <section class="content-box">
+            <h2>Calendar</h2>
+            
+            <div class="schedule-nav">
+                <button class="filter-btn active" onclick="switchScheduleTab('upcoming')">Current & Upcoming</button>
+                <button class="filter-btn" onclick="switchScheduleTab('past')">Past Events</button>
+            </div>
+            
+            <!-- UPCOMING TIMELINE CONTAINER -->
+            <div id="upcoming-timeline" class="timeline active"></div>
+
+            <!-- PAST TIMELINE CONTAINER -->
+            <div id="past-timeline" class="timeline"></div>
+
+        </section>
+    </div>
+
+    <footer><p>&copy; 2026 Space state magazine. All rights reserved.</p></footer>
+
+    <script>
+        // ======= ADD YOUR EVENTS DATA LIST HERE =======
+        // status-upcoming for things like events, etc, status-released for articles and magazine
+        const eventsData = [
+            { 
+                date: "2026-11-15", 
+                title: "Your Title Here", 
+                desc: "Your Description Here, to add link <a href='https://the link' class='calendar-link' target='_blank'>name of hyperlink</a>.", 
+                badge: "Upcoming", 
+                badgeClass: "status-upcoming" 
+            }
+        ];
+
+        function renderSchedule() {
+            const today = new Date();
+            // Zero out time settings for clean structural calendar comparison checks
+            today.setHours(0, 0, 0, 0); 
+            
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth(); // 0 = Jan, 9 = Oct
+
+            const upcomingContainer = document.getElementById("upcoming-timeline");
+            const pastContainer = document.getElementById("past-timeline");
+
+            let upcomingHTML = "";
+            let pastHTML = "";
+
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+
+            eventsData.forEach(ev => {
+                // Split string manually to bypass timezone conversions dropping dates backwards
+                const parts = ev.date.split('-');
+                const eventDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                eventDate.setHours(0, 0, 0, 0);
+
+                let currentBadge = ev.badge;
+                let currentBadgeClass = ev.badgeClass;
+
+                // Smart status checking override rule
+                if (eventDate < today) {
+                    currentBadge = "Archived";
+                    currentBadgeClass = "status-released";
+                }
+
+                const itemHTML = `
+                    <div class="timeline-item">
+                        <div class="timeline-date">${eventDate.toLocaleDateString('en-GB', dateOptions)}</div>
+                        <h3 class="timeline-title">${ev.title} <span class="status-badge ${currentBadgeClass}">${currentBadge}</span></h3>
+                        <p class="timeline-desc">${ev.desc}</p>
+                    </div>
+                `;
+
+                // If event belongs to the current calendar month or any future month, list it inside upcoming tab
+                if (eventDate.getFullYear() > currentYear || (eventDate.getFullYear() === currentYear && eventDate.getMonth() >= currentMonth)) {
+                    upcomingHTML += itemHTML;
+                } else {
+                    pastHTML += itemHTML;
+                }
+            });
+
+            upcomingContainer.innerHTML = upcomingHTML || '<p class="no-events">No current or upcoming events scheduled for this period.</p>';
+            pastContainer.innerHTML = pastHTML || '<p class="no-events">No past event history recorded.</p>';
+        }
+
+        function switchScheduleTab(tabType) {
+            const upBtn = document.querySelector("button[onclick*='upcoming']");
+            const pastBtn = document.querySelector("button[onclick*='past']");
+            const upTimeline = document.getElementById("upcoming-timeline");
+            const pastTimeline = document.getElementById("past-timeline");
+
+            if (tabType === 'upcoming') {
+                upBtn.classList.add("active");
+                pastBtn.classList.remove("active");
+                upTimeline.classList.add("active");
+                pastTimeline.classList.remove("active");
+            } else {
+                upBtn.classList.remove("active");
+                pastBtn.classList.add("active");
+                upTimeline.classList.remove("active");
+                pastTimeline.classList.add("active");
+            }
+        }
+
+        // Run engine build script immediately
+        renderSchedule();
+    </script>
+
+</body>
+</html>
