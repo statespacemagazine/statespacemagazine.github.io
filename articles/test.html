@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <!-- Corrected Google Font Integration Script Rules -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdfbf7;
+            --card-bg: #ffffff;
+            --text-color: #1a1a1a;
+            --border-color: #e2d9ce;
+            /* colourful layout accents */
+            --purple: #B129F5;
+            --blue: #4B29F5;
+            --pink: #F529D3;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.8; padding: 40px 20px; }
+        
+        .article-wrapper { max-width: 740px; margin: 0 auto; background: var(--card-bg); padding: 40px; border: 1px solid var(--border-color); box-shadow: 8px 8px 0px var(--purple); }
+        .back-home { display: inline-block; margin-bottom: 25px; color: var(--blue); text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+        .back-home:hover { text-decoration: underline; }
+        
+        .meta { color: #666; font-size: 0.9rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+        h1 { font-family: 'Lora', serif; font-size: 2.6rem; margin-bottom: 30px; line-height: 1.2; color: var(--text-color); }
+        
+        /* Editorial Segment Rules */
+        .segment { margin-bottom: 35px; }
+        .segment-title { font-family: 'Lora', serif; font-size: 1.5rem; margin-bottom: 12px; font-weight: 700; }
+        
+        .accent-purple { color: var(--purple); border-left: 4px solid var(--purple); padding-left: 12px; }
+        .accent-blue { color: var(--blue); border-left: 4px solid var(--blue); padding-left: 12px; }
+        .accent-pink { color: var(--pink); border-left: 4px solid var(--pink); padding-left: 12px; }
+        
+        p { font-size: 1.05rem; color: #222; margin-bottom: 15px; }
+        
+        /* Beautiful Image Containers */
+        .img-block { margin: 35px 0; border: 1px solid var(--border-color); padding: 10px; background: #fafafa; border-left: 5px solid var(--blue); }
+        .img-block img { width: 100%; height: auto; display: block; }
+        .img-caption { font-size: 0.85rem; color: #666; font-style: italic; margin-top: 8px; text-align: center; }
+        
+        /* References Box Container */
+        .references-box { background: #f9f6f0; border: 1px solid var(--border-color); padding: 25px; margin-top: 40px; }
+        .references-box h4 { font-family: 'Lora', serif; font-size: 1.15rem; margin-bottom: 10px; }
+        .references-list { list-style: none; }
+        .references-list li { font-size: 0.9rem; color: #444; margin-bottom: 6px; padding-left: 15px; position: relative; }
+        .references-list li::before { content: "▪"; position: absolute; left: 0; color: var(--pink); }
+        .references-list a { color: var(--blue); text-decoration: none; font-weight: 600; }
+        .references-list a:hover { text-decoration: underline; }
+
+        /* Bottom Credit Section */
+        .credit-footer { margin-top: 35px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; }
+        .avatar-circle { width: 45px; height: 45px; background: linear-gradient(135deg, var(--purple), var(--pink)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .credit-text h5 { font-size: 0.95rem; margin-bottom: 2px; }
+        .credit-text p { font-size: 0.85rem; color: #666; margin: 0; }
+        
+        @media (max-width: 600px) { .article-wrapper { padding: 20px; } h1 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+
+    <div class="article-wrapper">
+        <a href="../index.html" class="back-home">&larr; Back to Home</a>
+        
+        <div class="meta">8 October 2026</div>
+        <h1>test</h1>
+        
+        <!-- SEGMENT 1: WHAT'S NEW -->
+        <section class="segment">
+            <h2 class="segment-title accent-purple">whats new</h2>
+            <p>add text here </p>
+        </section>
+
+        <!-- IMAGE DISPLAY METHOD: EMBEDDING CAPABLE BLOCK -->
+        <div class="img-block">
+            <!-- Swap the source URL link out with real photo path if need -->
+            <img src="https://unsplash.com" alt="Space Briefing Visual Asset">
+            <div class="img-caption">Figure 1: s.</div>
+        </div>
+
+        <!-- SEGMENT 2: FUN FACTS -->
+        <section class="segment">
+            <h2 class="segment-title accent-pink">Fun Facts</h2>
+            <p>add more text here </p>
+        </section>
+
+        <!-- SEGMENT 3: REFERENCES BIT -->
+        <section class="references-box">
+            <h4>References & Sources</h4>
+            <ul class="references-list">
+                <li>Review data trackers over on the official scientific <a href="https://arxiv.org" target="_blank">arXiv Repository Database &rarr;</a></li>
+            </ul>
+        </section>
+        
+        <!-- SEGMENT 4: CREDIT SIGN OFF -->
+        <footer class="credit-footer">
+            <div class="avatar-circle">SS</div>
+            <div class="credit-text">
+                <h5>Written by Space State Editorial</h5>
+                <p>.</p>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>
