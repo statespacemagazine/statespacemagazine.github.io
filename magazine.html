@@ -26,6 +26,9 @@
         /* Viewport Display Layout */
         .viewer-title { font-family: 'Lora', serif; font-size: 1.4rem; margin-bottom: 15px; color: var(--text-color); scroll-margin-top: 130px; }
         .pdf-frame { width: 100%; height: 750px; border: 1px solid var(--border-color); background: #f4efea; margin-bottom: 40px; }
+        .pdf-pages { display: none; margin-bottom: 20px; }
+        .pdf-pages canvas { display: block; width: 100%; height: auto; border: 1px solid var(--border-color); background: #fff; margin-bottom: 12px; }
+        .pdf-status { color: #777; font-style: italic; margin-bottom: 15px; }
         .pdf-open-btn { display: none; background: var(--text-color); color: #fff; text-decoration: none; padding: 12px 20px; font-weight: 600; font-size: 0.95rem; margin-bottom: 30px; }
         
         /* Archive Row List Board */
@@ -48,10 +51,10 @@
             .content-box { padding: 20px; }
             h2 { font-size: 1.6rem; }
             .pdf-frame { display: none; }
+            .pdf-pages { display: block; }
             .pdf-open-btn { display: inline-block; }
             .magazine-row { flex-direction: column; align-items: flex-start; gap: 8px; }
             .action-links a { margin-left: 0; margin-right: 15px; }
-            .view-inline { display: none; }
         }
     </style>
 </head>
@@ -78,6 +81,7 @@
             <h2>Current Edition</h2>
             <div class="viewer-title" id="active-title">Loading Latest Issue...</div>
             <iframe id="magazine-viewport" class="pdf-frame" src="" title="Magazine Viewer"></iframe>
+            <div id="pdf-pages" class="pdf-pages"></div>
             <a id="open-current" class="pdf-open-btn" href="#" target="_blank">Open Current Edition &rarr;</a>
         </section>
 
@@ -90,6 +94,9 @@
 
     <footer><p>&copy; 2026 Space state magazine. All rights reserved.</p></footer>
 
+    <!-- PDF.js draws each PDF page to fit the phone screen -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
     <script>
         // ======= ADD YOUR MAGAZINE EDITIONS HERE (Chronological Order: Newest at the top) =======
         // how to use this page: put raw files in the magazine subfolder, add file path newest must be on top!
@@ -98,6 +105,18 @@
             { date: "2026-05-15", title: "test2", filePath: "magazines/title.pdf" },
             { date: "2025-12-10", title: "test3", filePath: "magazines/title.pdf" }
         ];
+
+        if (typeof pdfjsLib !== "undefined") {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        }
+
+        let currentIndex = 0;
+        let renderToken = 0;
+        let wasMobile = window.innerWidth <= 768;
+
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
 
         function renderMagazines() {
             const listContainer = document.getElementById("archives-board");
@@ -116,7 +135,7 @@
                             <a href="javascript:void(0)" class="mag-title-link" onclick="swapMagazine(${index})">${mag.title}</a>
                         </div>
                         <div class="action-links">
-                            <a href="javascript:void(0)" class="view-inline" onclick="swapMagazine(${index})">View On Page &darr;</a>
+                            <a href="javascript:void(0)" onclick="swapMagazine(${index})">View On Page &darr;</a>
                             <a href="${mag.filePath}" target="_blank">Open Fullscreen &rarr;</a>
                         </div>
                     </div>
@@ -126,21 +145,65 @@
             listContainer.innerHTML = listHTML || '<p style="color:#777; font-style:italic;">No seasonal publications recorded.</p>';
         }
 
-        // Loads one edition into the viewer, the title line and the mobile open button
+        // Loads one edition: iframe on desktop, page-by-page images on phones
         function showMagazine(index) {
+            currentIndex = index;
             const mag = magazineData[index];
-            document.getElementById("magazine-viewport").src = mag.filePath;
             document.getElementById("open-current").href = mag.filePath;
             document.getElementById("active-title").innerText = mag.title + ` (${formatDateString(mag.date)})`;
+
+            if (isMobile()) {
+                document.getElementById("magazine-viewport").src = "";
+                renderPdfPages(mag.filePath);
+            } else {
+                document.getElementById("pdf-pages").innerHTML = "";
+                document.getElementById("magazine-viewport").src = mag.filePath;
+            }
+        }
+
+        // Draws every PDF page as an image exactly as wide as the screen
+        async function renderPdfPages(url) {
+            const box = document.getElementById("pdf-pages");
+            const token = ++renderToken;
+
+            if (typeof pdfjsLib === "undefined") {
+                box.innerHTML = '<p class="pdf-status">The viewer could not load. Please use the button below to open the PDF.</p>';
+                return;
+            }
+
+            box.innerHTML = '<p class="pdf-status">Loading magazine...</p>';
+
+            try {
+                const pdf = await pdfjsLib.getDocument(url).promise;
+                if (token !== renderToken) return;
+                box.innerHTML = "";
+
+                const cssWidth = box.clientWidth;
+                const ratio = Math.min(window.devicePixelRatio || 1, 2);
+
+                for (let n = 1; n <= pdf.numPages; n++) {
+                    const page = await pdf.getPage(n);
+                    if (token !== renderToken) return;
+
+                    const base = page.getViewport({ scale: 1 });
+                    const viewport = page.getViewport({ scale: (cssWidth / base.width) * ratio });
+
+                    const canvas = document.createElement("canvas");
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    box.appendChild(canvas);
+
+                    await page.render({ canvasContext: canvas.getContext("2d"), viewport: viewport }).promise;
+                }
+            } catch (err) {
+                if (token === renderToken) {
+                    box.innerHTML = '<p class="pdf-status">This edition could not be shown here. Please use the button below to open the PDF.</p>';
+                }
+            }
         }
 
         // Action code runner to seamlessly shift active viewer paths on user input selection
         function swapMagazine(index) {
-            // Phones cannot show PDFs inside a frame, so open the file in a new tab instead
-            if (window.innerWidth <= 768) {
-                window.open(magazineData[index].filePath, '_blank');
-                return;
-            }
             showMagazine(index);
 
             // Smoothly snap window frame position to view focus range nicely
@@ -152,6 +215,14 @@
             const d = new Date(parts[0], parts[1] - 1, parts[2]);
             return d.toLocaleDateString('en-GB', { year: 'numeric', month: 'long' });
         }
+
+        // If the screen crosses the phone/desktop size (for example rotating a tablet), reload the viewer
+        window.addEventListener("resize", () => {
+            if (isMobile() !== wasMobile) {
+                wasMobile = isMobile();
+                if (magazineData.length > 0) showMagazine(currentIndex);
+            }
+        });
 
         // Run rendering sequence layout maps instantly
         renderMagazines();
